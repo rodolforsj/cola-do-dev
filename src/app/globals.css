@@ -45,3 +45,8 @@ pre {
   background: rgba(14, 128, 111, 0.2);
 }
 
+@layer base {
+  button {
+    @apply cursor-pointer;
+  }
+}

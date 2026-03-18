@@ -247,6 +247,13 @@ export default function HomePage() {
     });
   };
 
+  // Função para limpar todos os filtros e resetar a busca
+  const handleClearFilters = () => {
+    setQuery("");
+    setActiveCategory("Todas");
+    setActiveSubCategory("Todas");
+  };
+
   return (
     <>
       <main className="min-h-screen lg:grid lg:grid-cols-[16.5rem_minmax(0,1fr)]">
@@ -293,18 +300,52 @@ export default function HomePage() {
 
           <div className="px-4 py-4 md:px-6 md:py-5">
             {filteredEntries.length === 0 ? (
-              <section className="rounded-lg border border-dashed border-[var(--border)] px-4 py-8 text-center">
-                <h2 className="text-base font-semibold">Nenhum resultado encontrado</h2>
-                <p className="mt-1 text-sm text-[var(--muted)]">
-                  Tente outro termo de busca ou ajuste os filtros.
-                </p>
+              <section className="rounded-lg border border-dashed border-[var(--border)] px-4 py-8 flex flex-col items-center justify-center text-center">
+                
+                {/* Lógica dinâmica de Empty State */}
+                {activeCategory === "Favoritos" && favoriteIdSet.size === 0 ? (
+                  <>
+                    <h2 className="text-base font-semibold">Você ainda não tem favoritos</h2>
+                    <p className="mt-1 mb-5 text-sm text-[var(--muted)]">
+                      Navegue pelas categorias e marque os comandos que você mais usa.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleClearFilters}
+                      className="inline-flex h-9 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold text-white transition hover:opacity-90"
+                    >
+                      Explorar Comandos
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-base font-semibold">Nenhum resultado encontrado</h2>
+                    <p className="mt-1 mb-5 text-sm text-[var(--muted)]">
+                      Tente outro termo de busca ou ajuste os filtros.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleClearFilters}
+                      className="inline-flex h-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 text-sm font-medium text-[var(--foreground)] transition hover:bg-[var(--surface-strong)]"
+                    >
+                      Limpar Filtros
+                    </button>
+                  </>
+                )}
+
               </section>
             ) : (
               <>
                 {visibleInfoPanels.length > 0 ? (
                   <section className="space-y-2">
                     {visibleInfoPanels.map((panel) => (
-                      <InfoPanel key={panel.id} panel={panel} />
+                      <InfoPanel 
+                        key={panel.id} 
+                        panel={panel} 
+                        // Enviando os dados novos:
+                        isFavorite={favoriteIdSet.has(panel.id)}
+                        onToggleFavorite={handleToggleFavorite}
+                      />
                     ))}
                   </section>
                 ) : null}
@@ -323,6 +364,7 @@ export default function HomePage() {
         </section>
       </main>
 
+      {/* Menus mobile e Toasts mantidos iguais... */}
       <div
         className={[
           "fixed inset-0 z-50 lg:hidden",

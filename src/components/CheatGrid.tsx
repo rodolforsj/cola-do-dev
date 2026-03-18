@@ -15,6 +15,8 @@ export function CheatGrid({
   onToggleFavorite,
 }: CheatGridProps) {
   if (cheats.length === 0) {
+    return null;
+    /*
     return (
       <section className="mt-5 rounded-lg border border-dashed border-[var(--border)] px-4 py-8 text-center">
         <h3 className="text-base font-semibold">Nenhum comando copiável</h3>
@@ -22,7 +24,8 @@ export function CheatGrid({
           Ajuste os filtros ou refine a busca.
         </p>
       </section>
-    );
+    ); 
+    */
   }
 
   return (
